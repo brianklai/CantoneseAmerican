@@ -7,8 +7,8 @@ const links = [
   },
   {
     name: "Instagram",
-    href: "https://www.instagram.com/cantoneseamerican",
-    handle: "@cantoneseamerican",
+    href: "https://www.instagram.com/cantoneseamerica",
+    handle: "@cantoneseamerica",
     Icon: InstagramIcon,
   },
   {
