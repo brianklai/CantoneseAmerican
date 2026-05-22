@@ -13,8 +13,8 @@ const links = [
   },
   {
     name: "Facebook",
-    href: "https://www.facebook.com/cantoneseamerican",
-    handle: "/cantoneseamerican",
+    href: "https://www.facebook.com/profile.php?id=61590458965770",
+    handle: "Cantonese American",
     Icon: FacebookIcon,
   },
 ];
