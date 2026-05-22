@@ -4,7 +4,7 @@ import { Resend } from "resend";
 export const runtime = "nodejs";
 
 const TO_EMAIL =
-  process.env.SUBMISSION_TO_EMAIL || "appsforbrianlai@gmail.com";
+  process.env.SUBMISSION_TO_EMAIL || "speakingamericanorg@gmail.com";
 const FROM_EMAIL =
   process.env.SUBMISSION_FROM_EMAIL ||
   "Cantonese American <onboarding@resend.dev>";
