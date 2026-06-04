@@ -1,4 +1,4 @@
-export default function Hero() {
+export default function Hero({ sceneCount = 1 }: { sceneCount?: number }) {
   return (
     <section className="relative overflow-hidden">
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12 pt-16 sm:pt-24 lg:pt-32 pb-16 sm:pb-24">
@@ -51,7 +51,7 @@ export default function Hero() {
             </p>
             <div className="mt-10 grid grid-cols-3 gap-6">
               <Stat label="Series" value="001" />
-              <Stat label="Scenes" value="01" />
+              <Stat label="Scenes" value={String(sceneCount).padStart(2, "0")} />
               <Stat label="Open" value="∞" />
             </div>
           </aside>

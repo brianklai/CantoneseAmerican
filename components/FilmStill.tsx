@@ -1,12 +1,35 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-const YOUTUBE_URL = "https://www.youtube.com/watch?v=U0Cky9b6mHY";
+interface Props {
+  videoSrc: string;
+  posterTitle: string;
+  posterSubtitle: string;
+  posterTopMeta: string;
+  posterNumber: string;
+  decoration?: string;
+  externalUrl?: string;
+  externalLabel?: string;
+}
 
-export default function FilmStill() {
+export default function FilmStill({
+  videoSrc,
+  posterTitle,
+  posterSubtitle,
+  posterTopMeta,
+  posterNumber,
+  decoration = "廣東話",
+  externalUrl,
+  externalLabel = "Watch on YouTube →",
+}: Props) {
   const [playing, setPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Reset to poster when videoSrc changes (e.g. swapping archive entries).
+  useEffect(() => {
+    setPlaying(false);
+  }, [videoSrc]);
 
   function play() {
     setPlaying(true);
@@ -23,36 +46,59 @@ export default function FilmStill() {
         {playing ? (
           <video
             ref={videoRef}
-            src="/rush-hour.mp4"
+            src={videoSrc}
             controls
             playsInline
             className="absolute inset-0 w-full h-full bg-black"
           />
         ) : (
-          <Poster onPlay={play} />
+          <Poster
+            onPlay={play}
+            posterTitle={posterTitle}
+            posterSubtitle={posterSubtitle}
+            posterTopMeta={posterTopMeta}
+            posterNumber={posterNumber}
+            decoration={decoration}
+          />
         )}
       </div>
       <figcaption className="mt-3 flex flex-wrap items-center justify-between gap-3 text-xs text-muted">
         <span>Editorial treatment. All footage belongs to its makers.</span>
-        <a
-          href={YOUTUBE_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:text-accent transition-colors"
-        >
-          Watch on YouTube →
-        </a>
+        {externalUrl && (
+          <a
+            href={externalUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-accent transition-colors"
+          >
+            {externalLabel}
+          </a>
+        )}
       </figcaption>
     </figure>
   );
 }
 
-function Poster({ onPlay }: { onPlay: () => void }) {
+function Poster({
+  onPlay,
+  posterTitle,
+  posterSubtitle,
+  posterTopMeta,
+  posterNumber,
+  decoration,
+}: {
+  onPlay: () => void;
+  posterTitle: string;
+  posterSubtitle: string;
+  posterTopMeta: string;
+  posterNumber: string;
+  decoration: string;
+}) {
   return (
     <button
       type="button"
       onClick={onPlay}
-      aria-label="Play the Rush Hour 2 Cantonese scene"
+      aria-label={`Play the ${posterTitle} ${posterSubtitle} scene`}
       className="group absolute inset-0 w-full h-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
     >
       <div
@@ -64,8 +110,8 @@ function Poster({ onPlay }: { onPlay: () => void }) {
       />
       <div className="absolute inset-0 grain" />
 
-      <div className="absolute -left-2 sm:-left-4 top-2 sm:top-6 font-serif text-[180px] sm:text-[280px] lg:text-[340px] leading-none text-paper/[0.08] select-none pointer-events-none">
-        廣東話
+      <div className="absolute -left-2 sm:-left-4 top-2 sm:top-6 font-serif text-[120px] sm:text-[200px] lg:text-[260px] leading-none text-paper/[0.08] select-none pointer-events-none whitespace-nowrap">
+        {decoration}
       </div>
 
       <div className="absolute top-0 left-0 right-0 h-2.5 flex" aria-hidden>
@@ -88,19 +134,18 @@ function Poster({ onPlay }: { onPlay: () => void }) {
       <div className="absolute inset-0 flex flex-col justify-between p-6 sm:p-10">
         <div className="flex items-start justify-between gap-6 mt-2">
           <div className="text-[10px] uppercase tracking-ultra text-paper/60">
-            Featured · 001
+            No. {posterNumber}
           </div>
           <div className="text-right text-[10px] uppercase tracking-ultra text-paper/50">
-            Rush Hour 2<br />
-            New Line · 2001
+            {posterTopMeta}
           </div>
         </div>
 
         <div>
           <div className="font-serif text-3xl sm:text-5xl lg:text-6xl leading-[1.02] tracking-[-0.01em] max-w-2xl">
-            Don Cheadle,
+            {posterTitle}
             <br />
-            <span className="italic text-accent">in Cantonese.</span>
+            <span className="italic text-accent">{posterSubtitle}</span>
           </div>
           <div className="mt-4 flex items-center gap-3 text-[10px] uppercase tracking-ultra text-paper/60">
             <span className="inline-block w-6 h-px bg-paper/40" />
