@@ -5,12 +5,15 @@ import { type Scene } from "@/data/scenes";
 interface Props {
   scene: Scene;
   eyebrow?: string;
+  compact?: boolean;
 }
 
 export default function FeaturedScene({
   scene,
   eyebrow = `Featured Scene · No. ${scene.number}`,
+  compact = false,
 }: Props) {
+  const bodyToShow = compact ? scene.body.slice(0, 1) : scene.body;
   return (
     <article className="relative">
       <div className="grid grid-cols-12 gap-y-10 lg:gap-x-10">
@@ -57,9 +60,14 @@ export default function FeaturedScene({
         </div>
 
         <div className="col-span-12 lg:col-span-7 lg:col-start-6 space-y-5 text-[17px] leading-[1.6] text-ink/85 text-pretty">
-          {scene.body.map((p, i) => (
+          {bodyToShow.map((p, i) => (
             <p key={i}>{p}</p>
           ))}
+          {compact && scene.body.length > 1 && (
+            <p className="text-[12px] uppercase tracking-ultra text-muted pt-2">
+              Lede only · swipe for the next scene
+            </p>
+          )}
         </div>
       </div>
 

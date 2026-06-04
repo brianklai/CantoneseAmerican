@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import FeaturedScene from "./FeaturedScene";
 import { type Scene } from "@/data/scenes";
 
@@ -10,10 +10,51 @@ interface Props {
 
 export default function Archive({ scenes }: Props) {
   const [activeId, setActiveId] = useState<string>(scenes[0]?.id ?? "");
+  const activeIndex = Math.max(
+    0,
+    scenes.findIndex((s) => s.id === activeId),
+  );
+  const active = scenes[activeIndex];
+
+  const cardRefs = useRef<Record<string, HTMLLIElement | null>>({});
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+
+  function go(delta: number) {
+    if (scenes.length < 2) return;
+    const next = (activeIndex + delta + scenes.length) % scenes.length;
+    setActiveId(scenes[next].id);
+  }
+
+  function onTouchStart(e: React.TouchEvent) {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  }
+
+  function onTouchEnd(e: React.TouchEvent) {
+    if (touchStartX.current === null || touchStartY.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    const dy = e.changedTouches[0].clientY - touchStartY.current;
+    // Only treat as a swipe if mostly horizontal and meaningful distance.
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      go(dx < 0 ? 1 : -1);
+    }
+    touchStartX.current = null;
+    touchStartY.current = null;
+  }
+
+  // When active changes via arrows/swipe, scroll the strip to reveal it.
+  useEffect(() => {
+    const el = cardRefs.current[activeId];
+    if (!el) return;
+    el.scrollIntoView({
+      behavior: "smooth",
+      inline: "center",
+      block: "nearest",
+    });
+  }, [activeId]);
 
   if (scenes.length === 0) return null;
-
-  const active = scenes.find((s) => s.id === activeId) ?? scenes[0];
 
   return (
     <section id="archive" className="border-b border-rule bg-paper">
@@ -38,6 +79,9 @@ export default function Archive({ scenes }: Props) {
             {scenes.map((scene) => (
               <li
                 key={scene.id}
+                ref={(el) => {
+                  cardRefs.current[scene.id] = el;
+                }}
                 className="snap-start shrink-0 w-[260px] sm:w-[320px]"
               >
                 <ArchiveCard
@@ -50,14 +94,93 @@ export default function Archive({ scenes }: Props) {
           </ul>
         </div>
 
-        <div className="mt-16 sm:mt-20 border-t border-rule pt-12 sm:pt-16">
-          <FeaturedScene
-            scene={active}
-            eyebrow={`Archive · No. ${active.number}`}
+        <div
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
+          className="mt-16 sm:mt-20 border-t border-rule pt-10 sm:pt-12"
+        >
+          <NavBar
+            current={activeIndex + 1}
+            total={scenes.length}
+            onPrev={() => go(-1)}
+            onNext={() => go(1)}
+            disabled={scenes.length < 2}
           />
+          <div className="mt-8 sm:mt-10">
+            <FeaturedScene
+              scene={active}
+              eyebrow={`Archive · No. ${active.number}`}
+              compact
+            />
+          </div>
         </div>
       </div>
     </section>
+  );
+}
+
+function NavBar({
+  current,
+  total,
+  onPrev,
+  onNext,
+  disabled,
+}: {
+  current: number;
+  total: number;
+  onPrev: () => void;
+  onNext: () => void;
+  disabled: boolean;
+}) {
+  return (
+    <div className="flex items-center justify-between">
+      <div className="font-mono text-[11px] uppercase tracking-ultra text-muted">
+        <span className="text-ink">
+          {String(current).padStart(3, "0")}
+        </span>
+        <span className="mx-2 text-rule">/</span>
+        <span>{String(total).padStart(3, "0")}</span>
+        <span className="ml-3 hidden sm:inline">Swipe or use arrows</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <ArrowButton onClick={onPrev} disabled={disabled} dir="prev" />
+        <ArrowButton onClick={onNext} disabled={disabled} dir="next" />
+      </div>
+    </div>
+  );
+}
+
+function ArrowButton({
+  onClick,
+  disabled,
+  dir,
+}: {
+  onClick: () => void;
+  disabled: boolean;
+  dir: "prev" | "next";
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={dir === "prev" ? "Previous scene" : "Next scene"}
+      className="flex items-center justify-center w-11 h-11 border border-rule text-ink hover:bg-ink hover:text-paper transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={`w-4 h-4 ${dir === "prev" ? "rotate-180" : ""}`}
+        aria-hidden
+      >
+        <path d="M5 12h14" />
+        <path d="M13 6l6 6-6 6" />
+      </svg>
+    </button>
   );
 }
 
