@@ -65,8 +65,8 @@ export default function Archive({ scenes }: Props) {
               The Archive
             </div>
             <h2 className="mt-4 font-serif text-3xl sm:text-4xl leading-[1.05] tracking-[-0.01em]">
-              More scenes,{" "}
-              <span className="italic">already American.</span>
+              Cantonese,{" "}
+              <span className="italic">where it's always been.</span>
             </h2>
           </div>
           <div className="text-[10px] uppercase tracking-ultra text-muted whitespace-nowrap">
@@ -107,11 +107,7 @@ export default function Archive({ scenes }: Props) {
             disabled={scenes.length < 2}
           />
           <div className="mt-8 sm:mt-10">
-            <FeaturedScene
-              scene={active}
-              eyebrow={`Archive · No. ${active.number}`}
-              compact
-            />
+            <FeaturedScene scene={active} />
           </div>
         </div>
       </div>

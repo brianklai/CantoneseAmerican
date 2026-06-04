@@ -29,10 +29,10 @@ export default function Hero({ sceneCount = 1 }: { sceneCount?: number }) {
                 </span>
               </a>
               <a
-                href="#featured"
+                href="#archive"
                 className="text-sm text-ink/70 hover:text-ink underline underline-offset-4 decoration-rule hover:decoration-ink transition-colors"
               >
-                Read the first feature
+                Start with Don Cheadle
               </a>
             </div>
           </div>

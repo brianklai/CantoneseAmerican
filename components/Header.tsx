@@ -17,10 +17,10 @@ export default function Header() {
           </a>
           <nav className="flex items-center gap-6">
             <a
-              href="#featured"
+              href="#archive"
               className="hidden md:inline-block text-[10px] uppercase tracking-ultra text-muted hover:text-ink transition-colors"
             >
-              Featured
+              Archive
             </a>
             <a
               href="#why"

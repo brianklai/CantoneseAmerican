@@ -15,7 +15,7 @@ export default function Footer() {
               © {year} Speaking American. All scenes belong to their makers.
             </div>
             <div className="mt-2 flex gap-5 sm:justify-end">
-              <a href="#featured" className="hover:text-accent transition-colors">
+              <a href="#archive" className="hover:text-accent transition-colors">
                 Archive
               </a>
               <a href="#submit" className="hover:text-accent transition-colors">
