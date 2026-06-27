@@ -94,7 +94,7 @@ export default function MediaBlock({ scene }: Props) {
               rel="noopener noreferrer"
               className="hover:text-accent transition-colors"
             >
-              Official source →
+              {getExternalSourceLabel(scene.media.officialUrl)} →
             </TrackedLink>
           )}
           <Link href="/rights" className="hover:text-accent transition-colors">
@@ -174,7 +174,7 @@ function FallbackPanel({
     "official-link-only": {
       label: "Clip withheld on this site",
       body:
-        "This archive entry currently points to an official source rather than hosting a local clip.",
+        "This archive entry currently points to a reference or official source rather than hosting a local clip.",
     },
     removed: {
       label: "Clip removed after review",
@@ -233,13 +233,26 @@ function FallbackPanel({
               rel="noopener noreferrer"
               className="mt-5 inline-block text-sm text-paper/80 underline underline-offset-4 decoration-paper/25 transition-colors hover:text-accent hover:decoration-accent"
             >
-              Go to official source →
+              Go to {getExternalSourceLabel(scene.media.officialUrl).toLowerCase()} →
             </TrackedLink>
           )}
         </div>
       </div>
     </div>
   );
+}
+
+function getExternalSourceLabel(url: string) {
+  if (isImdbUrl(url)) return "Film database listing";
+  return "Official source";
+}
+
+function isImdbUrl(url: string) {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "") === "imdb.com";
+  } catch {
+    return false;
+  }
 }
 
 function Backdrop({ decoration = "廣東話" }: { decoration?: string }) {

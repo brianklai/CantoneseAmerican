@@ -112,25 +112,24 @@ export default function FeaturedSceneCarousel({ scenes, sceneIds }: Props) {
             activeMedia={activeMedia}
             onShowScene={() => setActiveMedia("scene")}
           />
-          <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
-            <div className="border border-rule p-5">
-              <div className="text-[10px] uppercase tracking-ultra text-muted">
-                Creator commentary
+          {commentary?.hostedUrl && (
+            <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
+              <div className="border border-rule p-5">
+                <div className="text-[10px] uppercase tracking-ultra text-muted">
+                  Creator commentary
+                </div>
+                <p className="mt-3 max-w-prose-tight text-[15px] leading-[1.6] text-ink/72">
+                  {scene.socialHook ??
+                    "A short companion video adds the editor's angle without replacing the archive record."}
+                </p>
               </div>
-              <p className="mt-3 max-w-prose-tight text-[15px] leading-[1.6] text-ink/72">
-                {commentary?.hostedUrl
-                  ? scene.socialHook ?? "A short companion video adds the editor's angle without replacing the archive record."
-                  : "Commentary video coming soon."}
-              </p>
-            </div>
-            {commentary?.hostedUrl && (
               <CommentaryVideo
                 videoSrc={commentary.hostedUrl}
                 caption={commentary.label}
                 onPlayRequest={() => setActiveMedia("commentary")}
               />
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

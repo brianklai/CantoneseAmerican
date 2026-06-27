@@ -186,110 +186,120 @@ export default function SceneRecord({ scene }: { scene: Scene }) {
                 Record details
               </div>
             </div>
-            <div className="col-span-12 grid gap-5 sm:grid-cols-2 lg:col-span-8">
-              <InfoBlock
-                title="Published"
-                body={formatPublishedDate(scene.publishedAt)}
-              />
-              <InfoBlock
-                title="Source"
-                body={formatSceneSource(scene)}
-              />
-              <InfoBlock
-                title="Language"
-                body={scene.languageTags.join(" · ")}
-              />
-              <InfoBlock
-                title="Rights holder"
-                body={scene.media.rightsHolder}
-              />
-            </div>
+            <details className="col-span-12 border border-rule p-5 lg:col-span-8">
+              <summary className="cursor-pointer list-none text-[10px] uppercase tracking-ultra text-muted transition-colors hover:text-ink">
+                Show record details
+              </summary>
+              <div className="mt-5 grid gap-5 sm:grid-cols-2">
+                <InfoBlock
+                  title="Published"
+                  body={formatPublishedDate(scene.publishedAt)}
+                />
+                <InfoBlock
+                  title="Source"
+                  body={formatSceneSource(scene)}
+                />
+                <InfoBlock
+                  title="Language"
+                  body={scene.languageTags.join(" · ")}
+                />
+                <InfoBlock
+                  title="Rights holder"
+                  body={scene.media.rightsHolder}
+                />
+              </div>
+            </details>
           </div>
         </div>
       </section>
 
       <section className="border-b border-rule bg-paper">
-        <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-24 lg:px-12">
+        <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 sm:py-16 lg:px-12">
           <div className="grid grid-cols-12 gap-y-10 lg:gap-x-10">
             <div className="col-span-12 lg:col-span-4">
               <div className="text-[10px] uppercase tracking-ultra text-muted">
-                Verification
+                Archive notes
               </div>
-              <h2 className="mt-4 font-serif text-4xl leading-[1.05] tracking-[-0.01em] sm:text-5xl">
-                Source trail,
-                <span className="italic"> kept visible.</span>
+              <h2 className="mt-4 font-serif text-3xl leading-[1.1] tracking-[-0.01em] sm:text-4xl">
+                Sources, rights,
+                <span className="italic"> and checks.</span>
               </h2>
             </div>
             <div className="col-span-12 space-y-4 lg:col-span-7 lg:col-start-6">
-              {scene.sources.map((source) => (
-                <div key={`${source.label}-${source.url}`} className="border border-rule p-5">
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <div className="font-serif text-2xl leading-tight text-ink">
-                      {source.label}
+              <details className="border border-rule p-5">
+                <summary className="cursor-pointer list-none text-[10px] uppercase tracking-ultra text-muted transition-colors hover:text-ink">
+                  Source trail
+                </summary>
+                <div className="mt-5 space-y-4">
+                  {scene.sources.map((source) => (
+                    <div key={`${source.label}-${source.url}`} className="border border-rule p-5">
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <div className="font-serif text-2xl leading-tight text-ink">
+                          {source.label}
+                        </div>
+                        <div className="text-[10px] uppercase tracking-ultra text-muted">
+                          {formatSourceType(source.type)}
+                        </div>
+                      </div>
+                      {source.type === "official" ? (
+                        <TrackedLink
+                          href={source.url}
+                          event="official_source_click"
+                          payload={{
+                            sceneId: scene.id,
+                            sceneSlug: scene.slug,
+                            sourceLabel: source.label,
+                            location: "verification_section",
+                          }}
+                          target={source.url.startsWith("http") ? "_blank" : undefined}
+                          rel={
+                            source.url.startsWith("http")
+                              ? "noopener noreferrer"
+                              : undefined
+                          }
+                          className="mt-3 block break-all text-sm text-ink/72 underline decoration-rule underline-offset-4 transition-colors hover:text-accent hover:decoration-accent"
+                        >
+                          {source.url}
+                        </TrackedLink>
+                      ) : (
+                        <a
+                          href={source.url}
+                          target={source.url.startsWith("http") ? "_blank" : undefined}
+                          rel={
+                            source.url.startsWith("http")
+                              ? "noopener noreferrer"
+                              : undefined
+                          }
+                          className="mt-3 block break-all text-sm text-ink/72 underline decoration-rule underline-offset-4 transition-colors hover:text-accent hover:decoration-accent"
+                        >
+                          {source.url}
+                        </a>
+                      )}
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {source.supports.map((support) => (
+                          <MetaTag key={support}>{support}</MetaTag>
+                        ))}
+                      </div>
+                      {source.accessedAt && (
+                        <div className="mt-4 text-xs text-muted">
+                          Accessed {formatPublishedDate(source.accessedAt)}
+                        </div>
+                      )}
                     </div>
-                    <div className="text-[10px] uppercase tracking-ultra text-muted">
-                      {formatSourceType(source.type)}
-                    </div>
-                  </div>
-                  {source.type === "official" ? (
-                    <TrackedLink
-                      href={source.url}
-                      event="official_source_click"
-                      payload={{
-                        sceneId: scene.id,
-                        sceneSlug: scene.slug,
-                        sourceLabel: source.label,
-                        location: "verification_section",
-                      }}
-                      target={source.url.startsWith("http") ? "_blank" : undefined}
-                      rel={
-                        source.url.startsWith("http")
-                          ? "noopener noreferrer"
-                          : undefined
-                      }
-                      className="mt-3 block break-all text-sm text-ink/72 underline decoration-rule underline-offset-4 transition-colors hover:text-accent hover:decoration-accent"
-                    >
-                      {source.url}
-                    </TrackedLink>
-                  ) : (
-                    <a
-                      href={source.url}
-                      target={source.url.startsWith("http") ? "_blank" : undefined}
-                      rel={
-                        source.url.startsWith("http")
-                          ? "noopener noreferrer"
-                          : undefined
-                      }
-                      className="mt-3 block break-all text-sm text-ink/72 underline decoration-rule underline-offset-4 transition-colors hover:text-accent hover:decoration-accent"
-                    >
-                      {source.url}
-                    </a>
-                  )}
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {source.supports.map((support) => (
-                      <MetaTag key={support}>{support}</MetaTag>
-                    ))}
-                  </div>
-                  {source.accessedAt && (
-                    <div className="mt-4 text-xs text-muted">
-                      Accessed {formatPublishedDate(source.accessedAt)}
-                    </div>
-                  )}
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
+              </details>
 
-          <div className="mt-16 grid grid-cols-12 gap-y-10 border-t border-rule pt-10 sm:mt-20 sm:pt-12 lg:gap-x-10">
-            <div className="col-span-12 lg:col-span-4">
-              <div className="text-[10px] uppercase tracking-ultra text-muted">
-                Verification notes
-              </div>
-            </div>
-            <div className="col-span-12 space-y-4 text-[16px] leading-[1.7] text-ink/80 text-pretty lg:col-span-7 lg:col-start-6">
-              {scene.verificationNotes.map((note) => (
-                <p key={note}>{note}</p>
-              ))}
+              <details className="border border-rule p-5">
+                <summary className="cursor-pointer list-none text-[10px] uppercase tracking-ultra text-muted transition-colors hover:text-ink">
+                  Verification and rights notes
+                </summary>
+                <div className="mt-5 space-y-4 text-[15px] leading-[1.7] text-ink/76 text-pretty">
+                  {scene.verificationNotes.map((note) => (
+                    <p key={note}>{note}</p>
+                  ))}
+                </div>
+              </details>
               {scene.media.rightsNotes && (
                 <div className="border border-rule p-5 text-[15px] leading-[1.7] text-ink/75">
                   <div className="text-[10px] uppercase tracking-ultra text-muted">

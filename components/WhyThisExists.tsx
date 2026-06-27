@@ -7,7 +7,7 @@ export default function WhyThisExists() {
         <div className="grid grid-cols-12 items-end gap-y-8 lg:gap-x-10">
           <div className="col-span-12 lg:col-span-4">
             <div className="text-[10px] uppercase tracking-ultra text-muted">
-              The Mission
+              Why this exists
             </div>
             <h2 className="mt-4 font-serif text-4xl leading-[1.05] tracking-[-0.01em] sm:text-5xl">
               An archive,

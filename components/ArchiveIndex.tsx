@@ -36,6 +36,10 @@ export default function ArchiveIndex({ scenes }: { scenes: Scene[] }) {
       .map((scene) => scene.year)
       .filter((value): value is number => typeof value === "number"),
   ).sort((a, b) => b - a);
+  const publishedLabel =
+    scenes.length === 1
+      ? "1 published record"
+      : `${scenes.length} published records`;
 
   const filteredScenes = scenes.filter((scene) => {
     const searchableText = [
@@ -68,6 +72,10 @@ export default function ArchiveIndex({ scenes }: { scenes: Scene[] }) {
       (year === "" || String(scene.year ?? "") === year)
     );
   });
+  const resultLabel =
+    filteredScenes.length === 1
+      ? "1 result"
+      : `${filteredScenes.length} results`;
 
   const hasActiveFilters =
     query !== "" ||
@@ -212,8 +220,7 @@ export default function ArchiveIndex({ scenes }: { scenes: Scene[] }) {
 
               <div className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-rule pt-5">
                 <div className="text-[10px] uppercase tracking-ultra text-muted">
-                  {filteredScenes.length} result{filteredScenes.length === 1 ? "" : "s"} ·{" "}
-                  {scenes.length} published in archive
+                  {resultLabel} · {publishedLabel}
                 </div>
                 {hasActiveFilters && (
                   <button

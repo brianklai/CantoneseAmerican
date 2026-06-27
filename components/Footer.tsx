@@ -1,4 +1,5 @@
 import Link from "next/link";
+import SocialLinks from "@/components/SocialLinks";
 import TrackedLink from "@/components/TrackedLink";
 
 export default function Footer() {
@@ -40,6 +41,13 @@ export default function Footer() {
               <Link href="/#follow" className="transition-colors hover:text-accent">
                 Follow
               </Link>
+            </div>
+            <div className="mt-3 sm:flex sm:justify-end">
+              <SocialLinks
+                location="footer_social"
+                surface="site_chrome"
+                variant="inline"
+              />
             </div>
           </div>
         </div>

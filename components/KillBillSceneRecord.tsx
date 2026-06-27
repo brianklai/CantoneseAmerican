@@ -49,6 +49,7 @@ export default function KillBillSceneRecord({ scene }: { scene: Scene }) {
   const relatedScenes = getRelatedScenes(scene);
   const commentaryVideo = scene.socialEmbeds.find((embed) => embed.hostedUrl);
   const transcriptStatus = scene.transcriptStatus ?? "mostly-verified";
+  const hasStructuredTranscript = scene.transcriptLines.length > 0;
   const reviewFlagCount =
     scene.reviewFlagCount ?? scene.transcriptReviewNotes?.length ?? 0;
   const publicSources =
@@ -57,6 +58,7 @@ export default function KillBillSceneRecord({ scene }: { scene: Scene }) {
       : scene.sources.filter(
           (source) => !source.url.includes("media.cantoneseamerican.com"),
         );
+  const isHostedMediaActive = scene.media.mediaStatus === "active";
 
   return (
     <article className="relative bg-paper">
@@ -92,7 +94,7 @@ export default function KillBillSceneRecord({ scene }: { scene: Scene }) {
                   href="#transcript"
                   className="inline-flex min-h-11 items-center border border-ink bg-ink px-4 text-sm text-paper transition-colors hover:bg-accent hover:border-accent"
                 >
-                  View transcript
+                  {hasStructuredTranscript ? "View transcript" : "Transcript notes"}
                 </a>
                 {commentaryVideo?.hostedUrl && (
                   <a
@@ -116,7 +118,7 @@ export default function KillBillSceneRecord({ scene }: { scene: Scene }) {
                     rel="noopener noreferrer"
                     className="inline-flex min-h-11 items-center border border-rule px-4 text-sm text-ink transition-colors hover:border-ink"
                   >
-                    Official source
+                    {getExternalSourceLabel(scene.media.officialUrl)}
                   </TrackedLink>
                 )}
               </div>
@@ -330,8 +332,9 @@ export default function KillBillSceneRecord({ scene }: { scene: Scene }) {
             <div className="col-span-12 lg:col-span-4">
               <Kicker>Sources & rights</Kicker>
               <p className="mt-4 max-w-prose-tight text-[15px] leading-[1.7] text-ink/72">
-                Media status can change. Transcript, translation, notes, and
-                source trail remain available if hosted media is removed.
+                {isHostedMediaActive
+                  ? "Media status can change. Transcript, translation, notes, and source trail remain available if hosted media is removed."
+                  : "This entry currently points to a reference or official source rather than hosting a local clip. Transcript, translation, notes, and source trail remain available independently."}
               </p>
               <Link
                 href="/rights"
@@ -347,9 +350,9 @@ export default function KillBillSceneRecord({ scene }: { scene: Scene }) {
                 ))}
               </div>
               <p className="mt-5 border-t border-rule pt-5 text-[14px] leading-[1.7] text-ink/68">
-                Hosted media is an editorial excerpt for commentary,
-                translation, and cultural documentation. See the rights policy
-                for review or removal requests.
+                {isHostedMediaActive
+                  ? "Hosted media is an editorial excerpt for commentary, translation, and cultural documentation. See the rights policy for review or removal requests."
+                  : "This record preserves cultural context, transcript status, and source notes even when the media is reference-only. See the rights policy for review or removal requests."}
               </p>
             </div>
           </div>
@@ -512,6 +515,19 @@ function SourceCard({
       </div>
     </div>
   );
+}
+
+function getExternalSourceLabel(url: string) {
+  if (isImdbUrl(url)) return "Film database listing";
+  return "Official source";
+}
+
+function isImdbUrl(url: string) {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "") === "imdb.com";
+  } catch {
+    return false;
+  }
 }
 
 function TranscriptLineCard({
