@@ -14,6 +14,12 @@ const links = [
     Icon: InstagramIcon,
   },
   {
+    name: "YouTube",
+    href: "https://www.youtube.com/@cantoneseamerican",
+    handle: "@cantoneseamerican",
+    Icon: YouTubeIcon,
+  },
+  {
     name: "Facebook",
     href: "https://www.facebook.com/profile.php?id=61590458965770",
     handle: "Cantonese American",
@@ -93,6 +99,14 @@ function InstagramIcon(props: React.SVGProps<SVGSVGElement>) {
       <rect x="3" y="3" width="18" height="18" rx="5" />
       <circle cx="12" cy="12" r="4" />
       <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function YouTubeIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...props}>
+      <path d="M21.58 7.2a2.73 2.73 0 0 0-1.92-1.93C17.96 4.8 12 4.8 12 4.8s-5.96 0-7.66.47A2.73 2.73 0 0 0 2.42 7.2 28.5 28.5 0 0 0 2 12a28.5 28.5 0 0 0 .42 4.8 2.73 2.73 0 0 0 1.92 1.93c1.7.47 7.66.47 7.66.47s5.96 0 7.66-.47a2.73 2.73 0 0 0 1.92-1.93A28.5 28.5 0 0 0 22 12a28.5 28.5 0 0 0-.42-4.8ZM10 15.2V8.8l5.2 3.2L10 15.2Z" />
     </svg>
   );
 }
