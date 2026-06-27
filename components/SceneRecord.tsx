@@ -1,4 +1,5 @@
 import CommentaryVideo from "@/components/CommentaryVideo";
+import KillBillSceneRecord from "@/components/KillBillSceneRecord";
 import MediaBlock from "@/components/MediaBlock";
 import SceneViewTracker from "@/components/SceneViewTracker";
 import TrackedLink from "@/components/TrackedLink";
@@ -16,6 +17,10 @@ import {
 } from "@/data/scenes";
 
 export default function SceneRecord({ scene }: { scene: Scene }) {
+  if (scene.id === "003") {
+    return <KillBillSceneRecord scene={scene} />;
+  }
+
   const relatedScenes = getRelatedScenes(scene);
   const transcriptLead = scene.transcriptLines[0];
   const transcriptLeadText = transcriptLead ? getTranscriptText(transcriptLead) : "";

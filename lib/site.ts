@@ -44,6 +44,7 @@ export function isStudioEnabled() {
 export const staticPaths = [
   "/",
   "/archive",
+  "/why",
   "/rights",
   "/privacy",
   "/nominate",

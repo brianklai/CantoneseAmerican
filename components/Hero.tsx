@@ -6,7 +6,7 @@ export default function Hero({ sceneCount = 1 }: { sceneCount?: number }) {
           <div className="col-span-12 lg:col-span-7">
             <div className="rise rise-1 flex items-center gap-3 text-[10px] uppercase tracking-ultra text-muted">
               <span className="inline-block h-px w-6 bg-ink" />
-              <span>Issue 001 — American, In Cantonese · Weekly archive</span>
+              <span>The Mission</span>
             </div>
             <h1 className="rise rise-2 mt-6 font-serif text-[44px] font-light leading-[0.95] tracking-[-0.02em] text-balance sm:text-[72px] lg:text-[104px]">
               Cantonese <span className="italic font-normal">is</span>
@@ -14,9 +14,8 @@ export default function Hero({ sceneCount = 1 }: { sceneCount?: number }) {
               <span className="text-accent">American.</span>
             </h1>
             <p className="rise rise-3 mt-8 max-w-prose-tight text-lg leading-[1.45] text-ink/80 text-pretty sm:text-xl">
-              A weekly archive of Cantonese-speaking culture in American media,
-              business, politics, history, and everyday life, built scene by
-              scene for the long haul.
+              A weekly archive of Cantonese and Chinese-language moments in
+              American media, business, politics, and everyday life.
             </p>
             <div className="rise rise-4 mt-10 flex flex-wrap items-center gap-x-6 gap-y-4">
               <a
@@ -49,7 +48,7 @@ export default function Hero({ sceneCount = 1 }: { sceneCount?: number }) {
             <div className="mt-10 grid grid-cols-3 gap-6">
               <Stat label="Series" value="001" />
               <Stat label="Scenes" value={String(sceneCount).padStart(2, "0")} />
-              <Stat label="Yearly pace" value="52+" />
+              <Stat label="Scenes / Year" value="52" />
             </div>
           </aside>
         </div>

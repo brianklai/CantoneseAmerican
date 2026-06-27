@@ -6,12 +6,14 @@ interface Props {
   videoSrc: string;
   tiktokUrl?: string;
   caption?: string;
+  onPlayRequest?: () => void;
 }
 
 export default function CommentaryVideo({
   videoSrc,
   tiktokUrl,
   caption = "From the editor",
+  onPlayRequest,
 }: Props) {
   const [playing, setPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -21,6 +23,11 @@ export default function CommentaryVideo({
   }, [videoSrc]);
 
   function play() {
+    if (onPlayRequest) {
+      onPlayRequest();
+      return;
+    }
+
     setPlaying(true);
     requestAnimationFrame(() => {
       videoRef.current?.play().catch(() => {});

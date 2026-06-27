@@ -119,12 +119,11 @@ export default function FeaturedScene({
             ) : (
               <div className="mt-4 border border-dashed border-rule p-6">
                 <div className="font-serif text-2xl text-ink">
-                  Transcript coming soon.
+                  Commentary preview.
                 </div>
                 <p className="mt-3 max-w-prose-tight text-[15px] leading-[1.7] text-ink/72">
-                  This preview carries the editor commentary now; the full
-                  line-by-line Cantonese transcript can be added as its own
-                  archive layer later.
+                  The full archive record carries the durable notes, media
+                  status, and transcript layer.
                 </p>
               </div>
             )}

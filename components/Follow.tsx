@@ -19,22 +19,16 @@ const links = [
     handle: "@cantoneseamerican",
     Icon: YouTubeIcon,
   },
-  {
-    name: "Facebook",
-    href: "https://www.facebook.com/profile.php?id=61590458965770",
-    handle: "Cantonese American",
-    Icon: FacebookIcon,
-  },
 ];
 
 export default function Follow() {
   return (
     <section id="follow" className="border-b border-rule">
-      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12 py-20 sm:py-24">
+      <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 sm:py-20 lg:px-12">
         <div className="grid grid-cols-12 gap-y-10 lg:gap-x-10 items-end">
           <div className="col-span-12 lg:col-span-5">
             <div className="text-[10px] uppercase tracking-ultra text-muted">
-              Follow
+              Public Channels
             </div>
             <h2 className="mt-4 font-serif text-4xl sm:text-5xl leading-[1.05] tracking-[-0.01em]">
               The archive lives{" "}
@@ -54,7 +48,7 @@ export default function Follow() {
                   payload={{ platform: name, location: "follow_section", surface: "homepage" }}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-5 py-5 sm:py-6 hover:text-accent transition-colors"
+                  className="group flex items-center gap-5 py-4 sm:py-5 hover:text-accent transition-colors"
                 >
                   <Icon className="w-5 h-5 flex-shrink-0" />
                   <span className="font-serif text-2xl sm:text-3xl">
@@ -107,14 +101,6 @@ function YouTubeIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...props}>
       <path d="M21.58 7.2a2.73 2.73 0 0 0-1.92-1.93C17.96 4.8 12 4.8 12 4.8s-5.96 0-7.66.47A2.73 2.73 0 0 0 2.42 7.2 28.5 28.5 0 0 0 2 12a28.5 28.5 0 0 0 .42 4.8 2.73 2.73 0 0 0 1.92 1.93c1.7.47 7.66.47 7.66.47s5.96 0 7.66-.47a2.73 2.73 0 0 0 1.92-1.93A28.5 28.5 0 0 0 22 12a28.5 28.5 0 0 0-.42-4.8ZM10 15.2V8.8l5.2 3.2L10 15.2Z" />
-    </svg>
-  );
-}
-
-function FacebookIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...props}>
-      <path d="M22 12a10 10 0 1 0-11.6 9.88v-6.99H7.9V12h2.5V9.8c0-2.47 1.47-3.84 3.72-3.84 1.08 0 2.2.19 2.2.19v2.42h-1.24c-1.22 0-1.6.76-1.6 1.54V12h2.72l-.43 2.89h-2.29v6.99A10 10 0 0 0 22 12z" />
     </svg>
   );
 }

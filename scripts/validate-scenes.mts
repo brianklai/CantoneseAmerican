@@ -138,7 +138,10 @@ function validatePublishedScene(scene: Scene) {
     );
   }
 
-  if (!scene.sources.some((source) => source.type === "official")) {
+  if (
+    !scene.sources.some((source) => source.type === "official") &&
+    !scene.media.officialUrl?.trim()
+  ) {
     warn(
       scene,
       "no official source is attached yet; archive entry may still need stronger citation",
@@ -240,8 +243,13 @@ function validateSource(scene: Scene, source: SceneSource, index: number) {
 function validateTranscriptLine(scene: Scene, line: TranscriptLine, index: number) {
   const prefix = `transcriptLines[${index}]`;
 
-  if (!line.original?.trim() && !line.text?.trim()) {
-    error(scene, `${prefix} needs either original or text`);
+  if (
+    !line.original?.trim() &&
+    !line.text?.trim() &&
+    !line.textTraditional?.trim() &&
+    !line.textSimplified?.trim()
+  ) {
+    error(scene, `${prefix} needs transcript text`);
   }
 
   if (!line.translation?.trim()) {

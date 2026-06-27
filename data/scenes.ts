@@ -75,6 +75,8 @@ export interface TranscriptLine {
   speaker?: string;
   original?: string;
   text?: string;
+  textTraditional?: string;
+  textSimplified?: string;
   scriptVariant?: "traditional" | "simplified" | "mixed" | "unknown";
   jyutping?: string;
   translation?: string;
@@ -88,7 +90,8 @@ export interface TranscriptLine {
     | "mostly-clear"
     | "uncertain"
     | "needs-audio-check"
-    | "needs-native-review";
+    | "needs-native-review"
+    | "translation-choice";
   flags?: Array<
     | "derogatory-language"
     | "unclear-audio"
@@ -138,6 +141,12 @@ export interface SceneContextSection {
   title: string;
   body: string[];
 }
+
+export type TranscriptStatus =
+  | "verified"
+  | "mostly-verified"
+  | "in-review"
+  | "not-started";
 
 const killBillPaiMeiMediaKey =
   "archive/kill-bill/pai-mei-subtitled-v1.mp4";
@@ -200,6 +209,10 @@ export interface Scene {
   lastVerifiedAt?: string;
   verificationNotes: string[];
   transcriptReviewNotes?: string[];
+  transcriptStatus?: TranscriptStatus;
+  transcriptVerifiedBy?: string;
+  transcriptVerificationNote?: string;
+  reviewFlagCount?: number;
   media: SceneMedia;
   socialEmbeds: SocialEmbed[];
   relatedScenes: string[];
@@ -451,6 +464,11 @@ export const scenes: Scene[] = [
     pullQuote:
       "Rick and Morty points back to Kill Bill, Kill Bill points back to Hong Kong kung fu cinema, and the trail eventually lands on Bak Mei / 白眉.",
     transcriptLines: killBillPaiMeiTranscript,
+    transcriptStatus: "mostly-verified",
+    transcriptVerifiedBy: "Cantonese American editorial review",
+    transcriptVerificationNote:
+      "Manually subtitled by Cantonese American. Most lines are editor-reviewed; uncertain audio moments are flagged individually.",
+    reviewFlagCount: killBillPaiMeiTranscriptNotes.length,
     commentary: [
       "This is the kind of scene the archive was built to hold: famous enough to feel obvious, long enough to matter structurally, and specific enough that the language is part of the scene's architecture.",
       "The working thesis is simple: Rick and Morty -> Kill Bill -> Hong Kong kung fu cinema -> Bak Mei / 白眉 folklore -> Cantonese. A modern animated reference can feel like the beginning of the thread, but the thread is older, stranger, and more Cantonese than the meme version usually admits.",
@@ -493,7 +511,7 @@ export const scenes: Scene[] = [
     accuracyNotes: [
       "The local R2-hosted source file runs 14:58.50 according to ffprobe.",
       "The film's commonly listed runtime is 137 minutes; the page therefore phrases the scene as about fifteen minutes or roughly ten percent of the movie, not as a frame-accurate analytic claim.",
-      "No line-by-line transcript is published yet. The attached video is manually subtitled, and a cleaner structured transcript can be added later.",
+      "The attached video is manually subtitled and editor-reviewed by Cantonese American. A cleaner structured transcript can be added later, with the remaining uncertain lines flagged individually.",
       "The scene includes racist, sexist, and ableist insults. They belong in the source record only with context, not celebration.",
     ],
     contentWarnings: [
@@ -528,7 +546,7 @@ export const scenes: Scene[] = [
     lastVerifiedAt: "2026-06-27",
     verificationNotes: [
       "The video source is pinned and hosted outside the repo on Cloudflare R2 so the archive page can remain portable and takedown-ready.",
-      "The line-by-line transcript is not published yet; this record currently prioritizes the clip, commentary, cultural framing, and known transcript notes.",
+      "The subtitled video has been reviewed by Cantonese American; remaining transcript uncertainty is listed as specific line-level review flags.",
       "The Rick and Morty connection is included as cultural framing. A later source pass can add the exact episode citation.",
     ],
     transcriptReviewNotes: killBillPaiMeiTranscriptNotes,

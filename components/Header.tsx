@@ -23,13 +23,7 @@ export default function Header() {
               Archive
             </Link>
             <Link
-              href="/rights"
-              className="hidden text-[10px] uppercase tracking-ultra text-muted transition-colors hover:text-ink md:inline-block"
-            >
-              Rights
-            </Link>
-            <Link
-              href="/#why"
+              href="/why"
               className="hidden text-[10px] uppercase tracking-ultra text-muted transition-colors hover:text-ink md:inline-block"
             >
               Why
