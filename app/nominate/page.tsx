@@ -3,7 +3,7 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import NominationForm from "@/components/NominationForm";
 import { candidates, getCandidateStatusCounts } from "@/data/candidates";
-import { formatEditorialStatus } from "@/data/scenes";
+import type { EditorialStatus } from "@/data/scenes";
 
 export const metadata: Metadata = {
   title: "Nominate a Scene",
@@ -33,14 +33,14 @@ export default function NominatePage() {
                 <span className="italic">find its next scene.</span>
               </h1>
               <p className="mt-5 max-w-prose-tight text-lg leading-[1.55] text-ink/78 text-pretty">
-                The weekly publishing engine starts with public memory. Send a
-                scene, a source trail, and whatever you remember. We&apos;ll take it
-                from candidate to verification, then to the archive.
+                Send a scene, a source trail, and whatever you remember. Exact
+                wording is welcome, but not required; a good lead is enough to
+                start the archive pass.
               </p>
               <div className="mt-10 grid grid-cols-2 gap-5">
                 <StatCard label="In research" value={String(statusCounts.researching)} />
                 <StatCard
-                  label="Need review"
+                  label="Needs audio review"
                   value={String(statusCounts["needs-native-review"])}
                 />
                 <StatCard
@@ -48,7 +48,7 @@ export default function NominatePage() {
                   value={String(statusCounts["ready-to-film"])}
                 />
                 <StatCard
-                  label="Need transcription"
+                  label="Needs transcript"
                   value={String(statusCounts["needs-transcription"])}
                 />
               </div>
@@ -69,7 +69,7 @@ export default function NominatePage() {
           <div className="mt-16 grid grid-cols-12 gap-y-10 border-t border-rule pt-10 sm:mt-20 sm:pt-12 lg:gap-x-10">
             <div className="col-span-12 lg:col-span-4">
               <div className="text-[10px] uppercase tracking-ultra text-muted">
-                Current candidate queue
+                Public candidate queue
               </div>
             </div>
             <div className="col-span-12 grid gap-4 lg:col-span-8">
@@ -80,7 +80,7 @@ export default function NominatePage() {
                       {candidate.categoryGuess} · {candidate.languageGuess}
                     </div>
                     <div className="text-[10px] uppercase tracking-ultra text-accent">
-                      {formatEditorialStatus(candidate.status)}
+                      {formatPublicStatus(candidate.status)}
                     </div>
                   </div>
                   <div className="mt-4 font-serif text-2xl leading-[1.15] text-ink">
@@ -92,7 +92,6 @@ export default function NominatePage() {
                   <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-xs text-muted">
                     <span>Added {formatShortDate(candidate.createdAt)}</span>
                     {candidate.timestamp && <span>{candidate.timestamp}</span>}
-                    {candidate.submittedBy && <span>{candidate.submittedBy}</span>}
                     {candidate.canHelpTranslateOrVerify && (
                       <span>Volunteer follow-up available</span>
                     )}
@@ -106,6 +105,19 @@ export default function NominatePage() {
       <Footer />
     </main>
   );
+}
+
+function formatPublicStatus(status: Exclude<EditorialStatus, "published">) {
+  const labels: Record<Exclude<EditorialStatus, "published">, string> = {
+    candidate: "New lead",
+    researching: "In research",
+    "needs-transcription": "Needs transcript",
+    "needs-native-review": "Needs audio review",
+    "ready-to-film": "Ready to film",
+    "ready-to-publish": "Nearly ready",
+  };
+
+  return labels[status];
 }
 
 function StatCard({ label, value }: { label: string; value: string }) {

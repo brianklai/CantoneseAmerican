@@ -51,6 +51,12 @@ export default function KillBillSceneRecord({ scene }: { scene: Scene }) {
   const transcriptStatus = scene.transcriptStatus ?? "mostly-verified";
   const reviewFlagCount =
     scene.reviewFlagCount ?? scene.transcriptReviewNotes?.length ?? 0;
+  const publicSources =
+    scene.media.mediaStatus === "active"
+      ? scene.sources
+      : scene.sources.filter(
+          (source) => !source.url.includes("media.cantoneseamerican.com"),
+        );
 
   return (
     <article className="relative bg-paper">
@@ -135,7 +141,7 @@ export default function KillBillSceneRecord({ scene }: { scene: Scene }) {
               value={
                 reviewFlagCount > 0
                   ? String(reviewFlagCount)
-                  : String(scene.sources.length)
+                  : String(publicSources.length)
               }
             />
           </div>
@@ -243,8 +249,9 @@ export default function KillBillSceneRecord({ scene }: { scene: Scene }) {
                     Transcript preview
                   </div>
                   <p className="mt-4 max-w-prose text-[17px] leading-[1.7] text-ink/78">
-                    Full structured transcript coming soon. Current notes
-                    identify the lines still under audio/native review.
+                    Structured transcript coming soon. The sequence has been
+                    manually subtitled; line-level transcript blocks will be
+                    published after final formatting and review.
                   </p>
                 </div>
               )}
@@ -323,8 +330,8 @@ export default function KillBillSceneRecord({ scene }: { scene: Scene }) {
             <div className="col-span-12 lg:col-span-4">
               <Kicker>Sources & rights</Kicker>
               <p className="mt-4 max-w-prose-tight text-[15px] leading-[1.7] text-ink/72">
-                Sources stay visible, but the clip can be removed or replaced
-                without removing the transcript, commentary, or cultural record.
+                Media status can change. Transcript, translation, notes, and
+                source trail remain available if hosted media is removed.
               </p>
               <Link
                 href="/rights"
@@ -335,15 +342,15 @@ export default function KillBillSceneRecord({ scene }: { scene: Scene }) {
             </div>
             <div className="col-span-12 lg:col-span-8">
               <div className="grid gap-4 sm:grid-cols-2">
-                {scene.sources.map((source) => (
+                {publicSources.map((source) => (
                   <SourceCard key={`${source.label}-${source.url}`} scene={scene} source={source} />
                 ))}
               </div>
-              {scene.media.rightsNotes && (
-                <p className="mt-5 border-t border-rule pt-5 text-[14px] leading-[1.7] text-ink/68">
-                  {scene.media.rightsNotes}
-                </p>
-              )}
+              <p className="mt-5 border-t border-rule pt-5 text-[14px] leading-[1.7] text-ink/68">
+                Hosted media is an editorial excerpt for commentary,
+                translation, and cultural documentation. See the rights policy
+                for review or removal requests.
+              </p>
             </div>
           </div>
         </div>

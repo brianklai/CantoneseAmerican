@@ -4,15 +4,12 @@ import MediaBlock from "@/components/MediaBlock";
 import SceneViewTracker from "@/components/SceneViewTracker";
 import TrackedLink from "@/components/TrackedLink";
 import {
-  formatEditorialStatus,
-  formatSceneCredits,
   formatSceneSource,
   formatSourceType,
   getNextScene,
   getPreviousScene,
   getRelatedScenes,
   getSceneDisplayNumber,
-  getSceneSocialLinks,
   type Scene,
 } from "@/data/scenes";
 
@@ -24,12 +21,10 @@ export default function SceneRecord({ scene }: { scene: Scene }) {
   const relatedScenes = getRelatedScenes(scene);
   const transcriptLead = scene.transcriptLines[0];
   const transcriptLeadText = transcriptLead ? getTranscriptText(transcriptLead) : "";
-  const credits = formatSceneCredits(scene);
   const editorialVideos = scene.socialEmbeds.filter((embed) => embed.hostedUrl);
   const notices = getSceneNotices(scene);
   const previousScene = getPreviousScene(scene);
   const nextScene = getNextScene(scene);
-  const socialLinks = getSceneSocialLinks(scene);
 
   return (
     <article className="relative">
@@ -61,7 +56,6 @@ export default function SceneRecord({ scene }: { scene: Scene }) {
                   <MetaTag key={tag}>{tag}</MetaTag>
                 ))}
                 <MetaTag>{scene.confidenceStatus}</MetaTag>
-                <MetaTag>{formatEditorialStatus(scene.editorialStatus)}</MetaTag>
               </div>
             </div>
 
@@ -126,7 +120,7 @@ export default function SceneRecord({ scene }: { scene: Scene }) {
           <div className="grid grid-cols-12 gap-y-10 lg:gap-x-10">
             <div className="col-span-12 lg:col-span-4">
               <div className="text-[10px] uppercase tracking-ultra text-muted">
-                Transcript
+                Transcript & translation
               </div>
               {transcriptLead ? (
                 <>
@@ -145,10 +139,11 @@ export default function SceneRecord({ scene }: { scene: Scene }) {
                   )}
                 </>
               ) : (
-                <EmptyState
-                  title="Transcript still in progress"
-                  body="The archive entry is live, but line-by-line transcription has not been published yet."
-                />
+                <p className="mt-4 max-w-prose-tight text-[15px] leading-[1.7] text-ink/72">
+                  Structured transcript coming soon. The archive record remains
+                  readable through its source trail, commentary, and cultural
+                  notes.
+                </p>
               )}
             </div>
 
@@ -165,8 +160,8 @@ export default function SceneRecord({ scene }: { scene: Scene }) {
                 </div>
               ) : (
                 <EmptyState
-                  title="No transcript published yet"
-                  body="This scene can still carry commentary, sources, and cultural notes before its final transcript is ready."
+                  title="Transcript preview"
+                  body="Line-level transcript blocks will appear here after formatting and review."
                 />
               )}
 
@@ -188,7 +183,7 @@ export default function SceneRecord({ scene }: { scene: Scene }) {
           <div className="mt-16 grid grid-cols-12 gap-y-10 border-t border-rule pt-10 sm:mt-20 sm:pt-12 lg:gap-x-10">
             <div className="col-span-12 lg:col-span-4">
               <div className="text-[10px] uppercase tracking-ultra text-muted">
-                Archive file
+                Record details
               </div>
             </div>
             <div className="col-span-12 grid gap-5 sm:grid-cols-2 lg:col-span-8">
@@ -197,98 +192,21 @@ export default function SceneRecord({ scene }: { scene: Scene }) {
                 body={formatPublishedDate(scene.publishedAt)}
               />
               <InfoBlock
-                title="Editorial status"
-                body={formatEditorialStatus(scene.editorialStatus)}
-              />
-              <InfoBlock title="Confidence" body={scene.confidenceStatus} />
-              <InfoBlock
-                title="Last verified"
-                body={
-                  scene.lastVerifiedAt
-                    ? formatPublishedDate(scene.lastVerifiedAt)
-                    : "Verification date pending"
-                }
+                title="Source"
+                body={formatSceneSource(scene)}
               />
               <InfoBlock
-                title="Locations"
-                body={scene.locationTags.join(" · ")}
+                title="Language"
+                body={scene.languageTags.join(" · ")}
               />
               <InfoBlock
                 title="Rights holder"
                 body={scene.media.rightsHolder}
               />
-              {credits.map((credit) => (
-                <InfoBlock key={credit} title="Credit" body={credit} />
-              ))}
             </div>
           </div>
         </div>
       </section>
-
-      {(scene.socialHook || scene.shortCaption || scene.hashtags?.length || socialLinks.length > 0) && (
-        <section className="border-b border-rule bg-paper">
-          <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-24 lg:px-12">
-            <div className="grid grid-cols-12 gap-y-10 lg:gap-x-10">
-              <div className="col-span-12 lg:col-span-4">
-                <div className="text-[10px] uppercase tracking-ultra text-muted">
-                  Social packaging
-                </div>
-                <h2 className="mt-4 font-serif text-4xl leading-[1.05] tracking-[-0.01em] sm:text-5xl">
-                  Built to travel,
-                  <span className="italic"> without losing context.</span>
-                </h2>
-              </div>
-              <div className="col-span-12 grid gap-5 lg:col-span-7 lg:col-start-6">
-                {scene.coverTitle && (
-                  <InfoBlock title="Cover title" body={scene.coverTitle} />
-                )}
-                {scene.socialHook && (
-                  <InfoBlock title="Social hook" body={scene.socialHook} />
-                )}
-                {scene.shortCaption && (
-                  <InfoBlock title="Short caption" body={scene.shortCaption} />
-                )}
-                {scene.callToAction && (
-                  <InfoBlock title="Call to action" body={scene.callToAction} />
-                )}
-                {scene.hashtags && scene.hashtags.length > 0 && (
-                  <InfoBlock
-                    title="Hashtags"
-                    body={scene.hashtags.join(" ")}
-                  />
-                )}
-                {socialLinks.length > 0 && (
-                  <div className="border border-rule p-5">
-                    <div className="text-[10px] uppercase tracking-ultra text-muted">
-                      Published links
-                    </div>
-                    <div className="mt-4 flex flex-wrap gap-4">
-                      {socialLinks.map((link) => (
-                        <TrackedLink
-                          key={link.label}
-                          href={link.href}
-                          event="social_click"
-                          payload={{
-                            sceneId: scene.id,
-                            sceneSlug: scene.slug,
-                            platform: link.label,
-                            location: "scene_page",
-                          }}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm text-ink/72 underline decoration-rule underline-offset-4 transition-colors hover:text-accent hover:decoration-accent"
-                        >
-                          {link.label} →
-                        </TrackedLink>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
 
       <section className="border-b border-rule bg-paper">
         <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-24 lg:px-12">
@@ -377,7 +295,11 @@ export default function SceneRecord({ scene }: { scene: Scene }) {
                   <div className="text-[10px] uppercase tracking-ultra text-muted">
                     Rights note
                   </div>
-                  <p className="mt-3">{scene.media.rightsNotes}</p>
+                  <p className="mt-3">
+                    Media status can change. Transcript, translation, notes,
+                    and source trail remain available if hosted media is
+                    removed.
+                  </p>
                 </div>
               )}
             </div>
@@ -688,9 +610,9 @@ function getSceneNotices(scene: Scene) {
 
   if (scene.editorialStatus === "needs-native-review") {
     notices.push({
-      title: "Native review needed",
+      title: "Audio review needed",
       body:
-        "This entry is waiting on a fluent listener to confirm line readings, dialect nuances, or translation choices.",
+        "This entry needs another listening pass to confirm line readings, dialect nuances, or translation choices.",
     });
   }
 

@@ -5,8 +5,6 @@ import { useDeferredValue, useState } from "react";
 import TrackedLink from "@/components/TrackedLink";
 import {
   confidenceStatuses,
-  editorialStatuses,
-  formatEditorialStatus,
   formatSceneDecade,
   formatSceneSource,
   getSceneDecade,
@@ -21,7 +19,6 @@ export default function ArchiveIndex({ scenes }: { scenes: Scene[] }) {
   const [category, setCategory] = useState("");
   const [language, setLanguage] = useState("");
   const [confidenceStatus, setConfidenceStatus] = useState("");
-  const [editorialStatus, setEditorialStatus] = useState("");
   const [decade, setDecade] = useState("");
   const [year, setYear] = useState("");
   const [workType, setWorkType] = useState("");
@@ -66,7 +63,6 @@ export default function ArchiveIndex({ scenes }: { scenes: Scene[] }) {
       (category === "" || scene.category === category) &&
       (language === "" || scene.languageTags.includes(language)) &&
       (confidenceStatus === "" || scene.confidenceStatus === confidenceStatus) &&
-      (editorialStatus === "" || scene.editorialStatus === editorialStatus) &&
       (workType === "" || scene.workType === workType) &&
       (decade === "" || String(getSceneDecade(scene)) === decade) &&
       (year === "" || String(scene.year ?? "") === year)
@@ -78,7 +74,6 @@ export default function ArchiveIndex({ scenes }: { scenes: Scene[] }) {
     category !== "" ||
     language !== "" ||
     confidenceStatus !== "" ||
-    editorialStatus !== "" ||
     decade !== "" ||
     year !== "" ||
     workType !== "";
@@ -88,7 +83,6 @@ export default function ArchiveIndex({ scenes }: { scenes: Scene[] }) {
     setCategory("");
     setLanguage("");
     setConfidenceStatus("");
-    setEditorialStatus("");
     setDecade("");
     setYear("");
     setWorkType("");
@@ -113,14 +107,14 @@ export default function ArchiveIndex({ scenes }: { scenes: Scene[] }) {
               <span className="italic">scene by scene.</span>
             </h1>
             <p className="mt-5 max-w-prose-tight text-lg leading-[1.55] text-ink/78 text-pretty">
-              Published entries stay readable even while verification,
-              transcription, or media handling continues behind the scenes.
+              Browse the published archive by title, category, language, and
+              source. The deeper workflow stays behind the studio door.
             </p>
           </div>
 
           <div className="col-span-12 lg:col-span-8">
             <div className="border border-rule p-5 sm:p-6">
-              <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+              <div className="grid gap-5 md:grid-cols-3">
                 <FilterInput
                   label="Search"
                   value={query}
@@ -153,76 +147,68 @@ export default function ArchiveIndex({ scenes }: { scenes: Scene[] }) {
                   }}
                   options={languages}
                 />
-                <FilterSelect
-                  label="Confidence"
-                  value={confidenceStatus}
-                  onChange={(value) => {
-                    setConfidenceStatus(value);
-                    trackEvent("category_filter", {
-                      filter: "confidence",
-                      value: value || "all",
-                      surface: "archive_index",
-                    });
-                  }}
-                  options={[...confidenceStatuses]}
-                />
-                <FilterSelect
-                  label="Editorial status"
-                  value={editorialStatus}
-                  onChange={(value) => {
-                    setEditorialStatus(value);
-                    trackEvent("category_filter", {
-                      filter: "editorial_status",
-                      value: value || "all",
-                      surface: "archive_index",
-                    });
-                  }}
-                  options={editorialStatuses.map((status) =>
-                    formatEditorialStatus(status),
-                  )}
-                  actualValues={[...editorialStatuses]}
-                />
-                <FilterSelect
-                  label="Decade"
-                  value={decade}
-                  onChange={(value) => {
-                    setDecade(value);
-                    trackEvent("category_filter", {
-                      filter: "decade",
-                      value: value || "all",
-                      surface: "archive_index",
-                    });
-                  }}
-                  options={decades.map((value) => `${value}s`)}
-                  actualValues={decades.map(String)}
-                />
-                <FilterSelect
-                  label="Year"
-                  value={year}
-                  onChange={(value) => {
-                    setYear(value);
-                    trackEvent("category_filter", {
-                      filter: "year",
-                      value: value || "all",
-                      surface: "archive_index",
-                    });
-                  }}
-                  options={years.map(String)}
-                />
-                <FilterSelect
-                  label="Work type"
-                  value={workType}
-                  onChange={(value) => {
-                    setWorkType(value);
-                    trackEvent("category_filter", {
-                      filter: "work_type",
-                      value: value || "all",
-                      surface: "archive_index",
-                    });
-                  }}
-                  options={[...workTypes]}
-                />
               </div>
+
+              <details className="mt-5 border-t border-rule pt-5">
+                <summary className="cursor-pointer list-none text-[10px] uppercase tracking-ultra text-muted transition-colors hover:text-ink">
+                  More filters
+                </summary>
+                <div className="mt-5 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+                  <FilterSelect
+                    label="Confidence"
+                    value={confidenceStatus}
+                    onChange={(value) => {
+                      setConfidenceStatus(value);
+                      trackEvent("category_filter", {
+                        filter: "confidence",
+                        value: value || "all",
+                        surface: "archive_index",
+                      });
+                    }}
+                    options={[...confidenceStatuses]}
+                  />
+                  <FilterSelect
+                    label="Decade"
+                    value={decade}
+                    onChange={(value) => {
+                      setDecade(value);
+                      trackEvent("category_filter", {
+                        filter: "decade",
+                        value: value || "all",
+                        surface: "archive_index",
+                      });
+                    }}
+                    options={decades.map((value) => `${value}s`)}
+                    actualValues={decades.map(String)}
+                  />
+                  <FilterSelect
+                    label="Year"
+                    value={year}
+                    onChange={(value) => {
+                      setYear(value);
+                      trackEvent("category_filter", {
+                        filter: "year",
+                        value: value || "all",
+                        surface: "archive_index",
+                      });
+                    }}
+                    options={years.map(String)}
+                  />
+                  <FilterSelect
+                    label="Work type"
+                    value={workType}
+                    onChange={(value) => {
+                      setWorkType(value);
+                      trackEvent("category_filter", {
+                        filter: "work_type",
+                        value: value || "all",
+                        surface: "archive_index",
+                      });
+                    }}
+                    options={[...workTypes]}
+                  />
+                </div>
+              </details>
 
               <div className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-rule pt-5">
                 <div className="text-[10px] uppercase tracking-ultra text-muted">
@@ -263,7 +249,6 @@ export default function ArchiveIndex({ scenes }: { scenes: Scene[] }) {
               <div className="mt-5 flex flex-wrap gap-2">
                 <Tag>{scene.category}</Tag>
                 <Tag>{scene.confidenceStatus}</Tag>
-                <Tag>{formatEditorialStatus(scene.editorialStatus)}</Tag>
                 <Tag>{formatSceneDecade(scene)}</Tag>
               </div>
               <div className="mt-5 text-sm text-muted">{formatSceneSource(scene)}</div>

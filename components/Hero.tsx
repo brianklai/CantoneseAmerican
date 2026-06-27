@@ -48,7 +48,7 @@ export default function Hero({ sceneCount = 1 }: { sceneCount?: number }) {
             <div className="mt-10 grid grid-cols-3 gap-6">
               <Stat label="Series" value="001" />
               <Stat label="Scenes" value={String(sceneCount).padStart(2, "0")} />
-              <Stat label="Scenes / Year" value="52" />
+              <Stat label="Weekly goal" value="52" />
             </div>
           </aside>
         </div>

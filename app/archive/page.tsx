@@ -7,7 +7,7 @@ import { publishedScenes } from "@/data/scenes";
 export const metadata: Metadata = {
   title: "Archive of Cantonese American Scenes",
   description:
-    "Browse published Cantonese American scenes by category, language, confidence, work type, and year.",
+    "Browse published Cantonese American scenes by title, category, language, and source.",
   alternates: {
     canonical: "/archive",
   },

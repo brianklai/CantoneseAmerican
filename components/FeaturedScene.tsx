@@ -2,7 +2,6 @@ import Link from "next/link";
 import CommentaryVideo from "./CommentaryVideo";
 import MediaBlock from "./MediaBlock";
 import {
-  formatEditorialStatus,
   formatSceneSource,
   getSceneDisplayNumber,
   type Scene,
@@ -47,7 +46,6 @@ export default function FeaturedScene({
               <Tag key={tag}>{tag}</Tag>
             ))}
             <Tag>{scene.confidenceStatus}</Tag>
-            <Tag>{formatEditorialStatus(scene.editorialStatus)}</Tag>
           </div>
           <div className="mt-10">
             <Link

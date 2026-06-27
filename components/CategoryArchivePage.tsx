@@ -1,7 +1,6 @@
 import Link from "next/link";
 import TrackedLink from "@/components/TrackedLink";
 import {
-  formatEditorialStatus,
   formatSceneSource,
   getSceneDisplayNumber,
   type Scene,
@@ -64,7 +63,6 @@ export default function CategoryArchivePage({
                 </p>
                 <div className="mt-5 flex flex-wrap gap-2">
                   <Tag>{scene.confidenceStatus}</Tag>
-                  <Tag>{formatEditorialStatus(scene.editorialStatus)}</Tag>
                   {scene.languageTags.slice(0, 2).map((tag) => (
                     <Tag key={tag}>{tag}</Tag>
                   ))}

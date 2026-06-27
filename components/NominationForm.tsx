@@ -64,7 +64,7 @@ export default function NominationForm({
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
   const [started, setStarted] = useState(false);
-  const surface = compact ? "nomination_page" : "homepage_form";
+  const surface = compact ? "nomination_page" : "homepage_cta";
 
   function markStart() {
     if (started) return;
@@ -180,8 +180,7 @@ export default function NominationForm({
           Thank you. It&apos;s in the weekly queue now.
         </h3>
         <p className={`mt-4 max-w-prose-tight text-[16px] leading-[1.6] ${styles.meta}`}>
-          We log every nomination with its source trail so it can move from
-          candidate to research, verification, and eventually the archive.
+          We log the source trail and review it for a future archive entry.
         </p>
         <button
           type="button"
@@ -283,10 +282,12 @@ export default function NominationForm({
           I can help translate or verify this.
         </span>
       </label>
-      <label className="hidden" aria-hidden="true">
-        Company
+      <div
+        aria-hidden="true"
+        className="absolute -left-[100vw] top-auto h-px w-px overflow-hidden"
+      >
         <input name="company" tabIndex={-1} autoComplete="off" />
-      </label>
+      </div>
 
       {error && (
         <div role="alert" className={`${styles.alert} px-4 py-3 text-sm`}>
@@ -304,7 +305,7 @@ export default function NominationForm({
           <span className="transition-transform group-hover:translate-x-1">→</span>
         </button>
         <span className={`text-[10px] uppercase tracking-ultra ${styles.meta}`}>
-          Static-first workflow · editorial review follows
+          Exact wording not required
         </span>
       </div>
     </form>
