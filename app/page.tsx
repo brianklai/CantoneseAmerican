@@ -5,14 +5,14 @@ import WhyThisExists from "@/components/WhyThisExists";
 import SubmitForm from "@/components/SubmitForm";
 import Follow from "@/components/Follow";
 import Footer from "@/components/Footer";
-import { scenes } from "@/data/scenes";
+import { publishedScenes } from "@/data/scenes";
 
 export default function Page() {
   return (
     <main className="relative">
       <Header />
-      <Hero sceneCount={scenes.length} />
-      <Archive scenes={scenes} />
+      <Hero sceneCount={publishedScenes.length} />
+      <Archive scenes={publishedScenes} />
       <WhyThisExists />
       <SubmitForm />
       <Follow />

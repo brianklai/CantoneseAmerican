@@ -1,39 +1,47 @@
+import Link from "next/link";
+import TrackedLink from "@/components/TrackedLink";
+
 export default function Header() {
   return (
-    <header className="relative z-30 border-b border-rule bg-paper/80 backdrop-blur supports-[backdrop-filter]:bg-paper/70 sticky top-0">
+    <header className="sticky top-0 relative z-30 border-b border-rule bg-paper/80 backdrop-blur supports-[backdrop-filter]:bg-paper/70">
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
-        <div className="flex items-center justify-between h-14">
-          <a href="#" className="flex items-baseline gap-3 group">
+        <div className="flex h-14 items-center justify-between">
+          <Link href="/" className="group flex items-baseline gap-3">
             <span className="font-serif text-[15px] tracking-tight">
               Cantonese American
             </span>
-            <span
-              className="hidden sm:inline-block h-3 w-px bg-rule"
-              aria-hidden
-            />
-            <span className="hidden sm:inline-block text-[10px] uppercase tracking-ultra text-muted group-hover:text-ink transition-colors">
+            <span className="hidden h-3 w-px bg-rule sm:inline-block" aria-hidden />
+            <span className="hidden text-[10px] uppercase tracking-ultra text-muted transition-colors group-hover:text-ink sm:inline-block">
               A Speaking American Project
             </span>
-          </a>
+          </Link>
           <nav className="flex items-center gap-6">
-            <a
-              href="#archive"
-              className="hidden md:inline-block text-[10px] uppercase tracking-ultra text-muted hover:text-ink transition-colors"
+            <Link
+              href="/archive"
+              className="hidden text-[10px] uppercase tracking-ultra text-muted transition-colors hover:text-ink md:inline-block"
             >
               Archive
-            </a>
-            <a
-              href="#why"
-              className="hidden md:inline-block text-[10px] uppercase tracking-ultra text-muted hover:text-ink transition-colors"
+            </Link>
+            <Link
+              href="/rights"
+              className="hidden text-[10px] uppercase tracking-ultra text-muted transition-colors hover:text-ink md:inline-block"
+            >
+              Rights
+            </Link>
+            <Link
+              href="/#why"
+              className="hidden text-[10px] uppercase tracking-ultra text-muted transition-colors hover:text-ink md:inline-block"
             >
               Why
-            </a>
-            <a
-              href="#submit"
-              className="text-[10px] uppercase tracking-ultra text-ink hover:text-accent transition-colors"
+            </Link>
+            <TrackedLink
+              href="/nominate"
+              event="nominate_click"
+              payload={{ location: "header_nav", surface: "site_chrome" }}
+              className="text-[10px] uppercase tracking-ultra text-ink transition-colors hover:text-accent"
             >
-              Nominate a Scene
-            </a>
+              Nominate
+            </TrackedLink>
           </nav>
         </div>
       </div>

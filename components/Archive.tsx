@@ -1,8 +1,13 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import FeaturedScene from "./FeaturedScene";
-import { type Scene } from "@/data/scenes";
+import {
+  formatSceneSource,
+  getSceneDisplayNumber,
+  type Scene,
+} from "@/data/scenes";
 
 interface Props {
   scenes: Scene[];
@@ -12,7 +17,7 @@ export default function Archive({ scenes }: Props) {
   const [activeId, setActiveId] = useState<string>(scenes[0]?.id ?? "");
   const activeIndex = Math.max(
     0,
-    scenes.findIndex((s) => s.id === activeId),
+    scenes.findIndex((scene) => scene.id === activeId),
   );
   const active = scenes[activeIndex];
 
@@ -35,15 +40,15 @@ export default function Archive({ scenes }: Props) {
     if (touchStartX.current === null || touchStartY.current === null) return;
     const dx = e.changedTouches[0].clientX - touchStartX.current;
     const dy = e.changedTouches[0].clientY - touchStartY.current;
-    // Only treat as a swipe if mostly horizontal and meaningful distance.
+
     if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) {
       go(dx < 0 ? 1 : -1);
     }
+
     touchStartX.current = null;
     touchStartY.current = null;
   }
 
-  // When active changes via arrows/swipe, scroll the strip to reveal it.
   useEffect(() => {
     const el = cardRefs.current[activeId];
     if (!el) return;
@@ -58,31 +63,44 @@ export default function Archive({ scenes }: Props) {
 
   return (
     <section id="archive" className="border-b border-rule bg-paper">
-      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12 py-20 sm:py-28">
-        <div className="flex items-end justify-between gap-6 mb-10 sm:mb-12">
+      <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28 lg:px-12">
+        <div className="mb-10 flex items-end justify-between gap-6 sm:mb-12">
           <div>
             <div className="text-[10px] uppercase tracking-ultra text-muted">
               The Archive
             </div>
-            <h2 className="mt-4 font-serif text-3xl sm:text-4xl leading-[1.05] tracking-[-0.01em]">
-              Cantonese,{" "}
-              <span className="italic">where it's always been.</span>
+            <h2 className="mt-4 font-serif text-3xl leading-[1.05] tracking-[-0.01em] sm:text-4xl">
+              A weekly record of Cantonese,
+              <span className="italic"> where it has always been.</span>
             </h2>
           </div>
-          <div className="text-[10px] uppercase tracking-ultra text-muted whitespace-nowrap">
-            {scenes.length} {scenes.length === 1 ? "entry" : "entries"} · growing
+          <div className="whitespace-nowrap text-[10px] uppercase tracking-ultra text-muted">
+            {scenes.length} {scenes.length === 1 ? "entry" : "entries"} · 52+ per year
           </div>
         </div>
+        <div className="mb-8 flex items-center justify-between gap-4 border-b border-rule pb-6">
+          <p className="max-w-prose-tight text-sm leading-[1.7] text-ink/72">
+            The homepage keeps a moving editorial preview. The full archive index
+            adds search, filters, and verification context across every
+            published scene.
+          </p>
+          <Link
+            href="/archive"
+            className="shrink-0 text-[10px] uppercase tracking-ultra text-muted transition-colors hover:text-accent"
+          >
+            Browse full archive →
+          </Link>
+        </div>
 
-        <div className="-mx-5 sm:-mx-8 lg:-mx-12 px-5 sm:px-8 lg:px-12 overflow-x-auto pb-2">
-          <ul className="flex gap-5 sm:gap-6 snap-x snap-mandatory">
+        <div className="-mx-5 overflow-x-auto px-5 pb-2 sm:-mx-8 sm:px-8 lg:-mx-12 lg:px-12">
+          <ul className="flex gap-5 snap-x snap-mandatory sm:gap-6">
             {scenes.map((scene) => (
               <li
                 key={scene.id}
                 ref={(el) => {
                   cardRefs.current[scene.id] = el;
                 }}
-                className="snap-start shrink-0 w-[260px] sm:w-[320px]"
+                className="w-[260px] shrink-0 snap-start sm:w-[320px]"
               >
                 <ArchiveCard
                   scene={scene}
@@ -97,13 +115,14 @@ export default function Archive({ scenes }: Props) {
         <div
           onTouchStart={onTouchStart}
           onTouchEnd={onTouchEnd}
-          className="mt-16 sm:mt-20 border-t border-rule pt-10 sm:pt-12"
+          className="mt-16 border-t border-rule pt-10 sm:mt-20 sm:pt-12"
         >
           <NavBar
             current={activeIndex + 1}
             total={scenes.length}
             onPrev={() => go(-1)}
             onNext={() => go(1)}
+            activeScene={active}
             disabled={scenes.length < 2}
           />
           <div className="mt-8 sm:mt-10">
@@ -120,27 +139,35 @@ function NavBar({
   total,
   onPrev,
   onNext,
+  activeScene,
   disabled,
 }: {
   current: number;
   total: number;
   onPrev: () => void;
   onNext: () => void;
+  activeScene: Scene;
   disabled: boolean;
 }) {
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex flex-wrap items-center justify-between gap-4">
       <div className="font-mono text-[11px] uppercase tracking-ultra text-muted">
-        <span className="text-ink">
-          {String(current).padStart(3, "0")}
-        </span>
+        <span className="text-ink">{String(current).padStart(3, "0")}</span>
         <span className="mx-2 text-rule">/</span>
         <span>{String(total).padStart(3, "0")}</span>
         <span className="ml-3 hidden sm:inline">Swipe or use arrows</span>
       </div>
-      <div className="flex items-center gap-2">
-        <ArrowButton onClick={onPrev} disabled={disabled} dir="prev" />
-        <ArrowButton onClick={onNext} disabled={disabled} dir="next" />
+      <div className="flex items-center gap-3">
+        <Link
+          href={`/archive/${activeScene.slug}`}
+          className="text-[10px] uppercase tracking-ultra text-muted transition-colors hover:text-accent"
+        >
+          Open scene page →
+        </Link>
+        <div className="flex items-center gap-2">
+          <ArrowButton onClick={onPrev} disabled={disabled} dir="prev" />
+          <ArrowButton onClick={onNext} disabled={disabled} dir="next" />
+        </div>
       </div>
     </div>
   );
@@ -161,7 +188,7 @@ function ArrowButton({
       onClick={onClick}
       disabled={disabled}
       aria-label={dir === "prev" ? "Previous scene" : "Next scene"}
-      className="flex items-center justify-center w-11 h-11 border border-rule text-ink hover:bg-ink hover:text-paper transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+      className="flex h-11 w-11 items-center justify-center border border-rule text-ink transition-colors hover:bg-ink hover:text-paper disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
     >
       <svg
         viewBox="0 0 24 24"
@@ -170,7 +197,7 @@ function ArrowButton({
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className={`w-4 h-4 ${dir === "prev" ? "rotate-180" : ""}`}
+        className={`h-4 w-4 ${dir === "prev" ? "rotate-180" : ""}`}
         aria-hidden
       >
         <path d="M5 12h14" />
@@ -208,43 +235,39 @@ function ArchiveCard({
         />
         <div className="absolute inset-0 grain" />
 
-        <div className="absolute -left-2 top-2 font-serif text-[110px] sm:text-[140px] leading-none text-paper/[0.08] select-none pointer-events-none whitespace-nowrap">
+        <div className="absolute -left-2 top-2 whitespace-nowrap font-serif text-[110px] leading-none text-paper/[0.08] pointer-events-none select-none sm:text-[140px]">
           {scene.poster.decoration ?? "廣東話"}
         </div>
 
-        <div className="absolute inset-0 p-5 flex flex-col justify-between">
+        <div className="absolute inset-0 flex flex-col justify-between p-5">
           <div className="flex items-start justify-between gap-3">
             <div className="text-[10px] uppercase tracking-ultra text-paper/60">
-              No. {scene.number}
+              No. {getSceneDisplayNumber(scene)}
             </div>
-            <div className="text-[10px] uppercase tracking-ultra text-paper/40 text-right">
+            <div className="text-right text-[10px] uppercase tracking-ultra text-paper/40">
               {scene.category}
             </div>
           </div>
-          <div className="font-serif text-2xl sm:text-3xl leading-[1.05] tracking-[-0.01em]">
+          <div className="font-serif text-2xl leading-[1.05] tracking-[-0.01em] sm:text-3xl">
             {scene.poster.title}
             <br />
-            <span className="italic text-accent">
-              {scene.poster.subtitle}
-            </span>
+            <span className="italic text-accent">{scene.poster.subtitle}</span>
           </div>
         </div>
 
         {active && (
-          <div
-            aria-hidden
-            className="absolute inset-x-0 bottom-0 h-1 bg-accent"
-          />
+          <div aria-hidden className="absolute inset-x-0 bottom-0 h-1 bg-accent" />
         )}
       </div>
+
       <div className="mt-3 flex items-center justify-between gap-3 text-xs text-muted">
-        <span className="truncate">{scene.source}</span>
+        <span className="truncate">{formatSceneSource(scene)}</span>
         <span
           className={`transition-colors ${
             active ? "text-accent" : "group-hover:text-ink"
           }`}
         >
-          {active ? "Reading" : "Open →"}
+          {active ? "Reading" : "Preview →"}
         </span>
       </div>
     </button>

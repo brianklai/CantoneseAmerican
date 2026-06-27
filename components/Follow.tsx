@@ -1,3 +1,5 @@
+import TrackedLink from "@/components/TrackedLink";
+
 const links = [
   {
     name: "TikTok",
@@ -40,8 +42,10 @@ export default function Follow() {
           <ul className="col-span-12 lg:col-span-6 lg:col-start-7 divide-y divide-rule border-y border-rule">
             {links.map(({ name, href, handle, Icon }) => (
               <li key={name}>
-                <a
+                <TrackedLink
                   href={href}
+                  event="social_click"
+                  payload={{ platform: name, location: "follow_section", surface: "homepage" }}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group flex items-center gap-5 py-5 sm:py-6 hover:text-accent transition-colors"
@@ -56,7 +60,7 @@ export default function Follow() {
                   <span className="ml-auto text-sm transition-transform group-hover:translate-x-1">
                     →
                   </span>
-                </a>
+                </TrackedLink>
               </li>
             ))}
           </ul>

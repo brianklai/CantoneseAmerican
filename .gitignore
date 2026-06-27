@@ -6,3 +6,7 @@ out
 .DS_Store
 *.tsbuildinfo
 next-env.d.ts
+
+# Large local source media. Upload these to R2 instead of Git/Vercel.
+public/Kill BIll Subtitled Compressed.mp4
+public/Kill Bill Rick & Morty Cantonese final commentary.mp4

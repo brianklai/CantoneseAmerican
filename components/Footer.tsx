@@ -1,29 +1,45 @@
+import Link from "next/link";
+import TrackedLink from "@/components/TrackedLink";
+
 export default function Footer() {
   const year = new Date().getFullYear();
+
   return (
     <footer className="bg-paper">
-      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12 py-10 sm:py-14">
-        <div className="grid grid-cols-12 gap-y-6 items-end">
+      <div className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-14 lg:px-12">
+        <div className="grid grid-cols-12 items-end gap-y-6">
           <div className="col-span-12 sm:col-span-6">
             <div className="font-serif text-2xl">Cantonese American</div>
             <div className="mt-2 text-[10px] uppercase tracking-ultra text-muted">
-              A Speaking American Project · Series 001 · American, In Cantonese
+              A Speaking American Project · Series 001 · Weekly cultural archive
             </div>
           </div>
-          <div className="col-span-12 sm:col-span-6 sm:text-right text-[12px] text-muted">
+          <div className="col-span-12 text-[12px] text-muted sm:col-span-6 sm:text-right">
             <div>
-              © {year} Speaking American. All scenes belong to their makers.
+              © {year} Speaking American. Clips remain the property of their
+              rights holders.
             </div>
             <div className="mt-2 flex gap-5 sm:justify-end">
-              <a href="#archive" className="hover:text-accent transition-colors">
+              <Link href="/archive" className="transition-colors hover:text-accent">
                 Archive
-              </a>
-              <a href="#submit" className="hover:text-accent transition-colors">
-                Submit
-              </a>
-              <a href="#follow" className="hover:text-accent transition-colors">
+              </Link>
+              <Link href="/rights" className="transition-colors hover:text-accent">
+                Rights & Takedown
+              </Link>
+              <Link href="/privacy" className="transition-colors hover:text-accent">
+                Privacy
+              </Link>
+              <TrackedLink
+                href="/nominate"
+                event="nominate_click"
+                payload={{ location: "footer_nav", surface: "site_chrome" }}
+                className="transition-colors hover:text-accent"
+              >
+                Nominate a Scene
+              </TrackedLink>
+              <Link href="/#follow" className="transition-colors hover:text-accent">
                 Follow
-              </a>
+              </Link>
             </div>
           </div>
         </div>

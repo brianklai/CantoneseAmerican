@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Inter } from "next/font/google";
+import { absoluteUrl, siteUrl } from "@/lib/site";
 import "./globals.css";
 
 const serif = Fraunces({
@@ -15,21 +16,26 @@ const sans = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "Cantonese American — A Speaking American project",
   description:
-    "A living archive of Cantonese-speaking culture in American movies, TV, history, and everyday life — starting with the scenes that made us feel at home.",
+    "A weekly archive of Cantonese-speaking culture in American media, business, politics, history, and everyday life.",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "Cantonese American",
     description:
-      "A living archive of Cantonese-speaking culture in American movies, TV, history, and everyday life.",
+      "A weekly archive of Cantonese-speaking culture in American media, business, politics, history, and everyday life.",
     type: "website",
     siteName: "Cantonese American",
+    url: absoluteUrl("/"),
   },
   twitter: {
     card: "summary_large_image",
     title: "Cantonese American",
     description:
-      "A living archive of Cantonese-speaking culture in American movies, TV, history, and everyday life.",
+      "A weekly archive of Cantonese-speaking culture in American media, business, politics, history, and everyday life.",
   },
 };
 
